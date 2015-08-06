@@ -22,4 +22,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.1.1'
+    compile 'com.google.protobuf:protobuf-java:2.4.1'
+    compile 'io.netty:netty-all:4.0.29.Final'
+    compile 'com.alibaba:fastjson:1.1.45'
+
 }
