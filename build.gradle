@@ -2,7 +2,8 @@
 
 buildscript {
     repositories {
-        jcenter()
+        //jcenter()
+        maven{ url 'http://localhost:8081/nexus/content/groups/public'}
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.2.3'
@@ -14,8 +15,9 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
+        //jcenter()
         //mavenLocal()
         //maven{ url 'http://maven.oschina.net/content/groups/public/'}
+        maven{ url 'http://localhost:8081/nexus/content/groups/public'}
     }
 }

@@ -25,5 +25,7 @@ dependencies {
     compile 'com.google.protobuf:protobuf-java:2.4.1'
     compile 'io.netty:netty-all:4.0.29.Final'
     compile 'com.alibaba:fastjson:1.1.45'
-
+    compile 'com.openim:openim-common-im:0.1'
+    compile 'com.openim:openim-common-bean:0.1'
+    compile 'com.mcxiaoke.volley:library:1.0.18'
 }
