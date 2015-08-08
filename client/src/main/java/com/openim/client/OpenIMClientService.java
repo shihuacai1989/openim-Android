@@ -17,8 +17,14 @@ public class OpenIMClientService extends Service{
     private Context context;
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        context = getApplicationContext();
+
+    }
+
+    @Override
     public IBinder onBind(Intent intent) {
-        context = this.getApplicationContext();
 
         IConnector esbConnector = new EsbConnector(context, ClientConstants.esbUrl);
         esbConnector.connect(new IConnector.ConnectorListener<String>() {
@@ -36,7 +42,6 @@ public class OpenIMClientService extends Service{
                 }
             }
         });
-
 
         return null;
     }

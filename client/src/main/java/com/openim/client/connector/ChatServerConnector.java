@@ -6,6 +6,7 @@ import com.openim.client.listener.IMessageListener;
 import com.openim.common.im.bean.ProtobufDeviceMsg;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -24,6 +25,7 @@ public class ChatServerConnector implements IConnector {
     private Context context;
     private String chatServerIp;
     private int chatServerPort;
+    private Channel channel;
 
     private IMessageListener messageListener;
 
@@ -37,6 +39,10 @@ public class ChatServerConnector implements IConnector {
         this.messageListener = messageListener;
     }
 
+    public void sendMessage(ProtobufDeviceMsg.DeviceMsg deviceMsg){
+        channel.writeAndFlush(deviceMsg);
+    }
+
     @Override
     public void connect(ConnectorListener listener) {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -45,7 +51,7 @@ public class ChatServerConnector implements IConnector {
                     .group(group)
                     .channel(NioSocketChannel.class)
                     .handler(new ProtobufChatClientInitializer());
-            bootstrap.connect(chatServerIp, chatServerPort).sync();
+            channel = bootstrap.connect(chatServerIp, chatServerPort).sync().channel();
             //BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             /*while (true) {
                 String line = in.readLine();

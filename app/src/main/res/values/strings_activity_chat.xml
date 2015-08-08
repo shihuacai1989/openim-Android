@@ -1,0 +1,5 @@
+<resources>
+
+    <!-- Strings related to login -->
+    <string name="send_btn">发送</string>
+</resources>
