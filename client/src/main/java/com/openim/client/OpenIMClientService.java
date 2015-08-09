@@ -4,11 +4,14 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 
 import com.openim.client.connector.ChatServerConnector;
 import com.openim.client.connector.EsbConnector;
 import com.openim.client.connector.IConnector;
+import com.openim.client.dispatch.IMessageHandler;
+import com.openim.client.dispatch.impl.ChatMessageHandler;
 import com.openim.client.listener.IMessageListener;
 import com.openim.common.bean.ResultCode;
 import com.openim.common.im.bean.DeviceMsgType;
@@ -24,20 +27,29 @@ public class OpenIMClientService extends Service{
 
     private IMessageListener messageListener;
 
+    private IMessageHandler chatMessageHandler;
+
+    private SendBroadcastReceiver sendBroadcastReceiver;
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+
+        chatMessageHandler = new ChatMessageHandler();
 
         messageListener = new IMessageListener() {
             @Override
             public void onReceive(ProtobufDeviceMsg.DeviceMsg deviceMsg) {
                 int type = deviceMsg.getType();
                 if(type == DeviceMsgType.SEND){
-
+                    chatMessageHandler.handle(context, deviceMsg);
                 }
             }
         };
+
+        IntentFilter intentFilter = new IntentFilter(ClientConstants.sendBroadcastFilter);
+        sendBroadcastReceiver = new SendBroadcastReceiver();
+        context.registerReceiver(sendBroadcastReceiver, intentFilter);
     }
 
     @Override
@@ -66,10 +78,10 @@ public class OpenIMClientService extends Service{
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        context.unregisterReceiver(sendBroadcastReceiver);
     }
 
-    private class SendBroadcasetReceiver extends BroadcastReceiver{
+    private class SendBroadcastReceiver extends BroadcastReceiver{
 
         @Override
         public void onReceive(Context context, Intent intent) {

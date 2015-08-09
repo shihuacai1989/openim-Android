@@ -19,7 +19,7 @@ import com.openim.common.im.bean.ProtobufDeviceMsg;
 /**
  * Created by shihuacai on 2015/8/8.
  */
-public class ChatActivity extends Activity {
+public class UserActivity extends Activity {
 
     private TextView chatWhoView;
     private ListView chatHistoryList;

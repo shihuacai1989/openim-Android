@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,7 +14,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,6 +23,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.openim.client.ClientConstants;
+import com.openim.client.connector.IConnector;
+import com.openim.client.connector.LoginConnector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +99,20 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
-        if (mAuthTask != null) {
+
+        String email = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
+        IConnector connector = new LoginConnector(this, ClientConstants.esbUrl, email, password);
+        connector.connect(new IConnector.ConnectorListener() {
+            @Override
+            public void finished(int code, Object data) {
+                Intent intent = new Intent(LoginActivity.this, UserActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        /*if (mAuthTask != null) {
             return;
         }
 
@@ -138,7 +155,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
-        }
+        }*/
     }
 
     private boolean isEmailValid(String email) {
