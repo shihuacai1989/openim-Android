@@ -5,4 +5,6 @@ package com.openim.client;
  */
 public class ClientConstants {
     public static final String esbUrl = "http://localhost:8080/";
+
+    public static final String chatBroadcastFilter = "com.openim.client.chatBroadcast";
 }

@@ -1,12 +1,17 @@
 package com.openim.demo;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.openim.client.ClientConstants;
 
 /**
  * Created by shihuacai on 2015/8/8.
@@ -17,6 +22,8 @@ public class ChatActivity extends Activity {
     private ListView chatHistoryList;
 
     private Button sendBtn;
+
+    ChatBroadCastReceiver chatBroadCastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +37,10 @@ public class ChatActivity extends Activity {
         String who = intent.getStringExtra(DemoConstants.who);
 
         chatWhoView.setText(who);
+
+        chatBroadCastReceiver = new ChatBroadCastReceiver();
+        IntentFilter filter = new IntentFilter(ClientConstants.chatBroadcastFilter);
+        registerReceiver(chatBroadCastReceiver, filter);
     }
 
     private void initSendBtn(){
@@ -40,5 +51,13 @@ public class ChatActivity extends Activity {
 
             }
         });
+    }
+
+    private class ChatBroadCastReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+        }
     }
 }
